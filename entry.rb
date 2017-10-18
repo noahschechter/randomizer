@@ -13,14 +13,16 @@ class Entry
 	end
 
 	def self.new_from_csv_entry(entry)
-		
-	end
-
-	def self.all
-		@@all
+		Entry.new(name: "#{entry[0]} #{entry[1]}", email: entry[2], department: entry[4])				
 	end
 
 	def self.randomize_by_attribute(attribute, num_of_teams)
+		amt_per_team = self.all().count / num_of_teams
+
+		puts amt_per_team
+	end
+
+	def self.all
 		@@all
 	end
 
