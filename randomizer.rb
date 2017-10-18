@@ -6,11 +6,25 @@ CSV_PATH = "./bowling_data.csv"
 
 def run
 	load_entries()
-	Entry.randomize_by_attribute("department", 15)
-	Entry.all().each { |entry| puts entry.name }
+	Entry.randomize_by_department(15)
+	write_results()
 
-	puts "Stats:\nTotal Entries: #{Entry.all().count}
-	"
+	puts "Stats:\nTotal Entries: #{Entry.all().count}"
+end
+
+def write_results()
+	CSV.open("results.csv", "w") do |csv|
+		csv << ["Name", "Email", "Department"]
+
+		Entry.teams.each do |team|
+			csv << [team[0].capitalize]
+			csv << [""]
+			team[1].each do |entry|
+				csv << [entry.name, entry.email, entry.department]
+			end
+			csv << [""]
+		end
+	end
 end
 
 def load_entries()
