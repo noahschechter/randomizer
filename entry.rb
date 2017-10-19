@@ -34,10 +34,6 @@ class Entry
 			end
 		end
 
-		# Sorting the departments by size
-
-		sorted_entries_by_department = entries_by_department.sort_by { |k, v| v.count }.to_h
-
 		# Shuffling those new tables
 
 		sorted_entries_by_department.each do |key, value|
