@@ -36,7 +36,7 @@ class Entry
 
 		# Shuffling those new tables
 
-		sorted_entries_by_department.each do |key, value|
+		entries_by_department.each do |key, value|
 			value.shuffle!
 		end
 
@@ -48,7 +48,7 @@ class Entry
 		
 		# Assembling the teams
 
-		copy_of_entries = Marshal.load(Marshal.dump(sorted_entries_by_department))
+		copy_of_entries = Marshal.load(Marshal.dump(entries_by_department))
 
 		i = 1
 
