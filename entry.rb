@@ -15,11 +15,10 @@ class Entry
 
 	def self.new_from_csv_entry(entry)
 		return if entry[0].nil?
-		Entry.new(name: "#{entry[0]} #{entry[1]}", email: entry[2], department: entry[4])				
+		Entry.new(name: "#{entry[1]} #{entry[0]}", department: entry[2], email: nil)
 	end
 
 	def self.randomize_by_department(num_of_teams)
-		amt_per_team = self.all().count / num_of_teams
 
 		entries_by_department = {}
 
@@ -27,6 +26,7 @@ class Entry
 
 		Entry.all().each do |entry|
 			dept = entry.department
+
 			if entries_by_department[dept]
 				entries_by_department[dept].push(entry)
 			else
@@ -36,7 +36,7 @@ class Entry
 
 		# Shuffling those new tables
 
-		sorted_entries_by_department.each do |key, value|
+		entries_by_department.each do |key, value|
 			value.shuffle!
 		end
 
@@ -48,17 +48,19 @@ class Entry
 		
 		# Assembling the teams
 
-		copy_of_entries = Marshal.load(Marshal.dump(sorted_entries_by_department))
+		copy_of_entries = Marshal.load(Marshal.dump(entries_by_department))
 
 		i = 1
 
-		while !self.get_active_departments(copy_of_entries).empty?
-			active_departments = self.get_active_departments(copy_of_entries)
+		active_departments = self.get_active_departments(copy_of_entries) 
+
+		while !active_departments.empty?
 
 			random_department = active_departments.keys.sample
 
 			while copy_of_entries[random_department].size > 0 do
-				i = 1 if i === 16
+				
+				i = 1 if i === num_of_teams + 1
 
 				random_entry = copy_of_entries[random_department].sample
 				@@teams["team#{i}"].push(random_entry)
@@ -66,12 +68,15 @@ class Entry
 
 				i += 1
 			end
+
+			# Update active_departments to reflect newly depleted department table
+			active_departments = self.get_active_departments(copy_of_entries) 
 		end
 
 	end
 
 	def self.get_active_departments(departments)
-		active_departments = departments.select { |k, v| v.count > 0}
+		active_departments = departments.select { |k, v| v.count > 0 }
 		active_departments
 	end
 	

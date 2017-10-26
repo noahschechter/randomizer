@@ -6,7 +6,9 @@ CSV_PATH = "./bowling_data.csv"
 
 def run
 	load_entries()
-	Entry.randomize_by_department(15)
+	puts "Input # of teams:"
+	num_of_teams = gets.chomp
+	Entry.randomize_by_department(num_of_teams.to_i)
 	write_results()
 
 	puts "Stats:\nTotal Entries: #{Entry.all().count}"
@@ -29,7 +31,7 @@ end
 
 def load_entries()
 	CSV.foreach(CSV_PATH, {:headers=>:first_row}) do |row|
-	  Entry.new_from_csv_entry(row)
+		Entry.new_from_csv_entry(row)
 	end rescue handle_error()
 end
 
